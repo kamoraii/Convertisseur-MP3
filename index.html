@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Convertisseur MP3</title>
+</head>
+<body>
+
+<h2>Convertir en MP3</h2>
+
+<input type="file" id="fileInput">
+<button onclick="convert()">Convertir</button>
+
+<p id="status"></p>
+
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
+
+<script>
+const { createFFmpeg, fetchFile } = FFmpeg;
+const ffmpeg = createFFmpeg({ log: true });
+
+async function convert() {
+  const fileInput = document.getElementById('fileInput');
+  const status = document.getElementById('status');
+
+  if (!fileInput.files.length) {
+    alert("Choisis un fichier");
+    return;
+  }
+
+  const file = fileInput.files[0];
+  status.innerText = "Chargement...";
+
+  if (!ffmpeg.isLoaded()) {
+    await ffmpeg.load();
+  }
+
+  ffmpeg.FS('writeFile', file.name, await fetchFile(file));
+
+  status.innerText = "Conversion en cours...";
+
+  await ffmpeg.run('-i', file.name, 'output.mp3');
+
+  const data = ffmpeg.FS('readFile', 'output.mp3');
+
+  const url = URL.createObjectURL(new Blob([data.buffer], { type: 'audio/mpeg' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'output.mp3';
+  a.click();
+
+  status.innerText = "Terminé ✔️";
+}
+</script>
+
+</body>
+</html>
