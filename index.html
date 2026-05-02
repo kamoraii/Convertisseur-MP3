@@ -2,17 +2,71 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Convertisseur MP3</title>
+  <title>MP3 App</title>
+
+  <!-- Mode app iPhone -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="MP3 App">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <!-- Responsive -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #111;
+      color: #fff;
+    }
+
+    h2 {
+      margin-bottom: 30px;
+    }
+
+    input, button {
+      margin: 10px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+    }
+
+    button {
+      background: #ff3b3b;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ff1f1f;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #ccc;
+    }
+  </style>
 </head>
+
 <body>
 
-<h2>Convertir en MP3</h2>
+<h2>Convertisseur MP3</h2>
 
 <input type="file" id="fileInput">
-<button onclick="convert()">Convertir</button>
+<br>
+
+<button onclick="convert()">Convertir en MP3</button>
+<br>
+
+<button onclick="installApp()">Installer l’app</button>
 
 <p id="status"></p>
 
+<!-- FFmpeg -->
 <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
 
 <script>
@@ -29,7 +83,7 @@ async function convert() {
   }
 
   const file = fileInput.files[0];
-  status.innerText = "Chargement...";
+  status.innerText = "Chargement du moteur...";
 
   if (!ffmpeg.isLoaded()) {
     await ffmpeg.load();
@@ -50,6 +104,10 @@ async function convert() {
   a.click();
 
   status.innerText = "Terminé ✔️";
+}
+
+function installApp() {
+  alert("Sur iPhone :\n\n1. Appuie sur le bouton Partager\n2. Choisis 'Sur l’écran d’accueil'");
 }
 </script>
 
